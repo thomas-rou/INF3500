@@ -4,9 +4,9 @@
 # INF3500 - labo 2 - automne 2023
 # Équipe **nom-d-équipe-ici**
 
-Membre #1 : **nom, prénom, matricule**
+Membre #1 : **Michaud, Maël, 2209239**
 
-Membre #2 : **nom, prénom, matricule**
+Membre #2 : **Rouleau, Thomas, 2221053**
 
 ------------------------------------------------------------------------
 
@@ -18,19 +18,15 @@ Voici un lien vers notre fichier modifié : [musee_labo_2.vhd](sources/musee_lab
 
 Voici un lien vers notre fichier modifié : [musee_labo_2_tb.vhd](sources/musee_labo_2_tb.vhd).
 
-Afin de pouvoir vérifier notre module, nous avons adopté la stratégie ...
+Afin de pouvoir vérifier notre module, nous avons adopté la stratégie de test exhaustif. Il s'agit d'un banc d'essai complet avec observation et évaluation des réponses à l'aide des énoncés *report* et *assert* afin d'effectuer une comparaison automatisé. Nous avons donc testé toutes les combinaisons possibles d'entrées et vérifié les sorties à l'aide de l'énoncé *assert*. Cela permet de confirmer que le module à le comportement attendu.
 
 ## Partie 3 : Synthèse et implémentation sur la carte
 
 **Faire un choix et garder seulement une option.**
 
 Nous utilisons la carte Basys 3.
-Nous utilisons la carte Nexys A7-50T.
-Nous utilisons la carte Nexys A7-100T.
 
 Voici un lien vers notre fichier de configuration final : [top_labo_2.bit](synthese-implementation/top_labo_2.bit)
-
-(Optionnel) Nous avons modifié le fichier principal pour l'implémentation, voici un lien vers ce fichier : [top_labo_2.vhd](sources/top_labo_2.vhd).
 
 ## Partie 4A : Bonus
 
@@ -42,34 +38,27 @@ Voici le nombre de ressources disponibles dans notre FPGA.
 
 Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
 ---------- | --------------- | -------- | -------- | ----------
-nombre? | nombre? | nombre? | nombre? | nombre?
+20800 | 41600 | 16300 | 8150 | 106
 
 Voici le nombre de ressources utilisées par notre unité musee_labo_2 pour différentes valeurs des generics.
 
-Nombfre de salles | Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
+Nombre de salles | Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
 --- | ---------- | --------------- | -------- | -------- | ------------
-8 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-12 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-16 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-20 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-24 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-28 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-32 | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
+8 | 15   | 0         | 0  | 0  | 15
+12 | 34    | 0         | 0  | 0  | 19
+16 | 78    | 0         | 0  | 0  | 23
+20 | 126    | 0         | 0  | 0  | 27
+24 | 222    | 0         | 0  | 0  | 31
+28 |  346    | 0         | 0  | 0  | 35
+32 | 462    | 0         | 0  | 0 | 39
 
-Voici un graphe du nombre de LUT en fonction de la somme de N_juges, N_senateurs et N_deputes.
+Voici un graphe du nombre de LUT et de Bonded IOB en fonction du nombre N de salle.
 
-![#LUT en fonction du nombre de salles](figures/LUT-vs-salles.png)  
+![#LUT en fonction du nombre de salles](figures/LUT-vs-salles.png)
 
-On remarque que ...
+On remarque que les slice LUTs augemente de façon quadratique en fonction du nombre de salles. On remarque aussi que le nombre de Bonded IOB augmente de façon linéaire en fonction du nombre de salles.
 
-Concernant les 'Slice LUTs', on peut voir que la relation est [linéaire, quadratique, exponentielle, etc.] ...
-
-Concernant les 'Bonded IOB', on peut voir que la relation est [linéaire, quadratique, exponentielle, etc.] ...
-
-Nous expliquons les courbes par ...
-
-Nous faisons l'hypothèse que ...
-
+Nous expliquons les courbes par le fait que la complexité de l'algorithme augmente rapidement en fonction du nombre de salles. Alors, il est probable que des opérations de traitement ou de calcul plus complexes soient nécessaires pour gérer les interactions entre ces salles, ce qui peut entraîner une croissance quadratique des "slice LUTs". De plus, le nombre de Bonded IOB augmente de façon linéaire en fonction du nombre de salles, car le nombre de salles est directement lié au nombre de ports d'entrée et de sortie. Ainsi, le nombre de Bonded IOB augmente de façon linéaire en fonction du nombre de salles.
 
 ## Observations et discussion générale
 

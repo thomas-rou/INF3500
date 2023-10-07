@@ -57,8 +57,39 @@ begin
 		end if;
 	end process;
     
-    -- code à modifier pour le bonus de la partie 4a.
-    alarme_reserve <= '1';
-    zone_reserve <= to_unsigned(3, zone_reserve'length);
+    -- code à modifier pour le bonus de la partie 4a.	
+	process(detecteurs_mouvement)
+	type vecteur_compteurs_zones is array (natural range <>) of natural;
+    variable compte_zones_actives : vecteur_compteurs_zones(0 to 3) := (0, 0, 0, 0);
+	variable zone_prioritaire : natural := 0;
+	begin
+		alarme_reserve <= '0';
+    	zone_reserve <= to_unsigned(0, zone_reserve'length); -- la valeur par défaut de zone_reserve = 0
+		compte_zones_actives  := (0, 0, 0, 0);
+		zone_prioritaire := 0;
+		for zone in 0 to 3 loop
+        	for j in zone * (N/4) to ((zone + 1) * (N/4) - 1) loop
+            	if detecteurs_mouvement(j) = '1' then
+                    compte_zones_actives(zone) := compte_zones_actives(zone) + 1;
+                end if;      
+        	end loop;
+    	end loop;
+		
+		for i in 0 to 3 loop
+			if compte_zones_actives(i) >= 2 then
+				alarme_reserve <= '1';			
+				if compte_zones_actives(i) > compte_zones_actives(zone_prioritaire) then
+        			zone_prioritaire := i;
+    			elsif compte_zones_actives(i) = compte_zones_actives(zone_prioritaire) and i <= zone_prioritaire then
+        			zone_prioritaire := i;
+				end if;
+			end if;
+		end loop;
+		if alarme_reserve = '1' then
+			zone_reserve <= to_unsigned(zone_prioritaire, zone_reserve'length);
+		else
+			zone_reserve <= to_unsigned(0, zone_reserve'length);
+		end if;
+	end process;
 
 end;

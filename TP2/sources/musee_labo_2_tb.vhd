@@ -45,6 +45,9 @@ begin
     -- application exhaustive des vecteurs de test, affichage et vérification
     process
 	variable compte_tb : natural := 0;
+	type vecteur_compteurs_zones_tb is array (natural range <>) of natural;
+    variable compte_zones_actives_tb : vecteur_compteurs_zones_tb(0 to 3) := (0, 0, 0, 0);
+	variable zone_prioritaire_tb : natural := 0;
     begin
 		compte_tb := 0;
         for k in 0 to 2 ** N_tb - 1 loop
@@ -74,6 +77,37 @@ begin
 				assert(alarme_generale_tb = '1')	report "erreur générale" 	severity warning;
 				assert(alarme_jasette_tb = '0' or alarme_intrus_tb = '0' or alarme_greve_tb = '0')		report "Plusieurs alarmes" 	severity warning;
             end if;
+			
+			-- tests pour la partie 4
+			compte_zones_actives_tb  := (0, 0, 0, 0);
+			zone_prioritaire_tb := 0;
+			
+        	for zone in 0 to 3 loop
+            	for j in zone * (N_tb/4) to ((zone + 1) * (N_tb/4) - 1) loop
+                	if detecteurs_mouvement_tb(j) = '1' then
+                    	compte_zones_actives_tb(zone) := compte_zones_actives_tb(zone) + 1;
+                	end if;      
+            	end loop;
+        	end loop;  						 
+			
+			if compte_zones_actives_tb(0) >= 2 and compte_zones_actives_tb(0) >= compte_zones_actives_tb(1) and 
+				compte_zones_actives_tb(0) >= compte_zones_actives_tb(2) and compte_zones_actives_tb(0) >= compte_zones_actives_tb(3) then  
+				assert(zone_reserve_tb = "00")			report "erreur de zone 0"			severity warning;
+				assert(alarme_reserve_tb = '1')			report "erreur d'alarme zone 0"		severity warning;
+			elsif compte_zones_actives_tb(1) >= 2 and compte_zones_actives_tb(1) >= compte_zones_actives_tb(2) and compte_zones_actives_tb(1) >= compte_zones_actives_tb(3) then
+				assert(zone_reserve_tb = "01")			report "erreur de zone 1"			severity warning;
+				assert(alarme_reserve_tb = '1')			report "erreur d'alarme zone 1"		severity warning;
+			elsif compte_zones_actives_tb(2) >= 2 and compte_zones_actives_tb(2) >= compte_zones_actives_tb(3) then
+				assert(zone_reserve_tb = "10")			report "erreur de zone 2"			severity warning;
+				assert(alarme_reserve_tb = '1')			report "erreur d'alarme zone 2"		severity warning;
+			elsif compte_zones_actives_tb(3) >= 2 then
+				assert(zone_reserve_tb = "11")			report "erreur de zone 3"			severity warning;
+				assert(alarme_reserve_tb = '1')			report "erreur d'alarme zone 3"		severity warning;
+			else
+				assert(zone_reserve_tb = "00")			report "erreur de zone defaut"	severity warning;
+			end if;
+				
+
         end loop;
             
         report "simulation terminée" severity failure;
