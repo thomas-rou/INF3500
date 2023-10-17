@@ -44,36 +44,37 @@ begin
         elsif rising_edge(clk) then
             case etat is
                 when e_00 =>
-                    if boutons = "0010" then
-                        etat <= e_01; 
+                    if boutons = "0010" then	--bouton haut
+                        etat <= e_01;
+					elsif boutons /= "0000" then
+						etat <= e_00;
                     end if;
                 when e_01 =>
-                    if boutons = "0100" then
+                    if boutons = "0100" then	--bouton gauche
                         etat <= e_02;
-				  elsif boutons /= "0000" then 
-					 etat <= e_00;
+					elsif boutons /= "0000" then
+						etat <= e_00;
                     end if;
                 when e_02 =>
-                    if boutons = "1000" then
+                    if boutons = "1000" then	--bouton bas
                         etat <= e_03;
-				  elsif boutons /= "0000" then
-					 etat <= e_00;
+					elsif boutons /= "0000" then
+						etat <= e_00;
                     end if;
                 when e_03 =>
-                    if boutons = "0001" then
+                    if boutons = "0001" then	--bouton droit
                         etat <= e_04;
-				  elsif boutons /= "0000" then
-					 etat <= e_00;
+					elsif boutons /= "0000" then
+						etat <= e_00;
                     end if;
                 when e_04 =>
-                    if boutons = "0010" then
+                    if boutons = "0010" then	--bouton haut
                         etat <= e_05;
-				  elsif boutons /= "0000" then
-					 etat <= e_00;
-				  end if;
-			   when e_05 => 
-			   		
-                 when others =>
+					elsif boutons /= "0000" then
+						etat <= e_00;
+                    end if;	
+				when e_05 =>
+                when others =>
                     etat <= e_00;
             end case;
         end if;
@@ -85,7 +86,7 @@ begin
         case etat is
             when e_00 =>
                 ouvrir <= '0';
-                alarme <= '1';
+                alarme <= '1';		--Conservé à 1 comme le cas initial fournis
                 message <= "e_00";
             when e_01 =>
                 ouvrir <= '0';
@@ -103,10 +104,10 @@ begin
                 ouvrir <= '0';
                 alarme <= '0';
                 message <= "e_04";
-		   when e_05 =>
-		   	  ouvrir <= '1';
-		   	  alarme <= '0';
-		       message <= "ourr";
+			when e_05 =>
+				ouvrir <= '1';
+                alarme <= '0';
+                message <= "ourr";
             when others =>
                 ouvrir <= '0';
                 alarme <= '0';
