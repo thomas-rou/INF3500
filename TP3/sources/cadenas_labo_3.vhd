@@ -27,7 +27,7 @@ end cadenas_labo_3;
 
 architecture arch of cadenas_labo_3 is
     
-    type etat_type is (e_00, e_01, e_02, e_03, e_04);
+    type etat_type is (e_00, e_01, e_02, e_03, e_04, e_05);
     signal etat : etat_type := e_00;
     
     type combinaison_type is array (0 to M - 1) of std_logic_vector(N - 1 downto 0);
@@ -44,25 +44,35 @@ begin
         elsif rising_edge(clk) then
             case etat is
                 when e_00 =>
-                    if boutons(0) = '1' then
-                        etat <= e_01;
+                    if boutons = "0010" then
+                        etat <= e_01; 
                     end if;
                 when e_01 =>
-                    if boutons(0) = '1' then
+                    if boutons = "0100" then
                         etat <= e_02;
+				  elsif boutons /= "0000" then 
+					 etat <= e_00;
                     end if;
                 when e_02 =>
-                    if boutons(0) = '1' then
+                    if boutons = "1000" then
                         etat <= e_03;
+				  elsif boutons /= "0000" then
+					 etat <= e_00;
                     end if;
                 when e_03 =>
-                    if boutons(0) = '1' then
+                    if boutons = "0001" then
                         etat <= e_04;
+				  elsif boutons /= "0000" then
+					 etat <= e_00;
                     end if;
                 when e_04 =>
-                    if boutons(0) = '1' then
-                        etat <= e_00;
-                    end if;
+                    if boutons = "0010" then
+                        etat <= e_05;
+				  elsif boutons /= "0000" then
+					 etat <= e_00;
+				  end if;
+			   when e_05 => 
+			   		
                  when others =>
                     etat <= e_00;
             end case;
@@ -90,9 +100,13 @@ begin
                 alarme <= '0';
                 message <= "e_03";
             when e_04 =>
-                ouvrir <= '1';
+                ouvrir <= '0';
                 alarme <= '0';
                 message <= "e_04";
+		   when e_05 =>
+		   	  ouvrir <= '1';
+		   	  alarme <= '0';
+		       message <= "ourr";
             when others =>
                 ouvrir <= '0';
                 alarme <= '0';

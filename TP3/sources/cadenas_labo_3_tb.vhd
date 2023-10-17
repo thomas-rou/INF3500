@@ -32,14 +32,14 @@ architecture arch of cadenas_labos_3_tb is
     
     type combinaison_type is array (0 to 19) of std_logic_vector(N - 1 downto 0);
     signal vecteurs : combinaison_type := (
-    "0001", "0001", "0001", "0001", "0001", 
-    "0000", "0000", "0000", "0000", "0001", 
-    "0001", "0010", "0100", "1000", "0001",
-    "0001", "0010", "0100", "1000", "0001"
+    "0000", "0010", "0000", "0000", "0000",
+    "0000", "0100", "0000", "0000", "0000",
+    "0000", "1000", "0001", "0000", "0000",
+    "0000", "0000", "0010", "0000", "0000"
     );
     
     signal vecteur_tests_un_bouton : std_logic_vector(15 downto 0) := "0011100101110011";
-
+    signal vecteur_tests_quatre_bouton : std_logic_vector( 19 downto 0) := "00100001100001000010";
 begin
 
     UUT : entity cadenas_labo_3(arch)
@@ -47,7 +47,7 @@ begin
         port map (reset, clk, boutons, mode, ouvrir, alarme, message);
 
     clk <= not clk after periode / 2;
-    reset <= '1' after 0 ns, '0' after 5 * periode / 4;
+    reset <= '1' after 0 ns, '0' after 5 * periode / 4, '1' after 100ns;
     
     process(clk)
     variable indice : natural range 0 to vecteurs'length;
@@ -56,14 +56,18 @@ begin
         if reset = '1' then
             indice := 0;
         elsif falling_edge(clk) then -- on choisit la polarité d'horloge inverse de celle de l'UUT pour simplifier la lecture de la trace
-            if indice < vecteur_tests_un_bouton'length then
-                boutons(0) <= vecteur_tests_un_bouton(indice);
-                report "bouton : " & to_string(vecteur_tests_un_bouton(indice))
+            if indice < vecteur_tests_quatre_bouton'length then
+                boutons(0) <= vecteur_tests_quatre_bouton(indice);
+                boutons(1) <= vecteur_tests_quatre_bouton(indice+1);
+                boutons(2) <= vecteur_tests_quatre_bouton(indice+2);
+                boutons(3) <= vecteur_tests_quatre_bouton(indice+3);
+                report "bouton : " & to_string(vecteur_tests_quatre_bouton(indice))
                     & ", message : " & message
                     & ", alarme : " & to_string(alarme)
                     & ", ouvrir : " & to_string(ouvrir)
-                    severity note;
-                indice := indice + 1;
+                   severity note;
+                indice := indice + 4;
+
             else
                 report "simulation terminée" severity failure;
             end if;
