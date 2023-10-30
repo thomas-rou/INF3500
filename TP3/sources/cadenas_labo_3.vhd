@@ -33,16 +33,15 @@ architecture arch of cadenas_labo_3 is
     type combinaison_type is array (0 to M - 1) of std_logic_vector(N - 1 downto 0);
     signal combinaison : combinaison_type;
     constant combinaison_base : combinaison_type := ("0010", "0100", "1000", "0001", "0010");
-	signal combinaison_compteur : integer := 5;
     
 begin
     
     -- processus pour la séquence des états
     process(all) is
+	variable combinaison : combinaison_type := combinaison_base;
     begin
         if reset = '1' then
             etat <= e_00;
-			combinaison <= combinaison_base;
         elsif rising_edge(clk) then
             case etat is
                 when e_00 =>
@@ -82,12 +81,10 @@ begin
 						etat <= e_00;
                     end if;
 				when e_06 =>
-					combinaison_compteur <= 0;
-					while combinaison_compteur < combinaison'length loop
+					for i in 0 to combinaison_base'length - 1 loop
                         if( boutons /= "0000") then
-                            combinaison(combinaison_compteur) <= boutons;
-                            combinaison_compteur <= combinaison_compteur + 1;
-				      	end if;
+                              combinaison(i) := boutons;
+				      end if;
                     end loop;
                 when others =>
                     etat <= e_00;
