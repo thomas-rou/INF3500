@@ -39,6 +39,7 @@ begin
     -- processus pour la séquence des états
     process(all) is
 	variable combinaison : combinaison_type := combinaison_base;
+	variable inputCount : natural := 0;
     begin
         if reset = '1' then
             etat <= e_00;
@@ -81,11 +82,12 @@ begin
 						etat <= e_00;
                     end if;
 				when e_06 =>
-					for i in 0 to combinaison_base'length - 1 loop
-                        if( boutons /= "0000") then
-                              combinaison(i) := boutons;
-				      end if;
-                    end loop;
+					if(boutons /= "0000") and inputCount < 5 then
+						combinaison(inputCount) := boutons;
+						inputCount := inputCount + 1;
+					elsif inputCount >= 5 then
+						etat <= e_00;
+                  	end if;
                 when others =>
                     etat <= e_00;
             end case;
