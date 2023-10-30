@@ -27,12 +27,13 @@ end cadenas_labo_3;
 
 architecture arch of cadenas_labo_3 is
     
-    type etat_type is (e_00, e_01, e_02, e_03, e_04, e_05);
+    type etat_type is (e_00, e_01, e_02, e_03, e_04, e_05, e_06);
     signal etat : etat_type := e_00;
     
     type combinaison_type is array (0 to M - 1) of std_logic_vector(N - 1 downto 0);
     signal combinaison : combinaison_type;
-    constant combinaison_base : combinaison_type := ("0001", "0010", "0100", "1000", "0001");
+    constant combinaison_base : combinaison_type := ("0010", "0100", "1000", "0001", "0010");
+	signal combinaison_compteur : integer := 5;
     
 begin
     
@@ -41,39 +42,53 @@ begin
     begin
         if reset = '1' then
             etat <= e_00;
+			combinaison <= combinaison_base;
         elsif rising_edge(clk) then
             case etat is
                 when e_00 =>
-                    if boutons = "0010" then	--bouton haut
+                    if boutons = combinaison(0) then	--bouton haut
                         etat <= e_01;
 					elsif boutons /= "0000" then
 						etat <= e_00;
                     end if;
                 when e_01 =>
-                    if boutons = "0100" then	--bouton gauche
+                    if boutons = combinaison(1) then	--bouton gauche
                         etat <= e_02;
 					elsif boutons /= "0000" then
 						etat <= e_00;
                     end if;
                 when e_02 =>
-                    if boutons = "1000" then	--bouton bas
+                    if boutons = combinaison(2) then	--bouton bas
                         etat <= e_03;
 					elsif boutons /= "0000" then
 						etat <= e_00;
                     end if;
                 when e_03 =>
-                    if boutons = "0001" then	--bouton droit
+                    if boutons = combinaison(3) then	--bouton droit
                         etat <= e_04;
 					elsif boutons /= "0000" then
 						etat <= e_00;
                     end if;
                 when e_04 =>
-                    if boutons = "0010" then	--bouton haut
+                    if boutons = combinaison(4) then	--bouton haut
                         etat <= e_05;
 					elsif boutons /= "0000" then
 						etat <= e_00;
                     end if;	
 				when e_05 =>
+					if boutons = "0101" then
+						etat <= e_06;
+					elsif boutons /= "0000" or boutons = "1010" then
+						etat <= e_00;
+                    end if;
+				when e_06 =>
+					combinaison_compteur <= 0;
+					while combinaison_compteur < combinaison'length loop
+                        if( boutons /= "0000") then
+                            combinaison(combinaison_compteur) <= boutons;
+                            combinaison_compteur <= combinaison_compteur + 1;
+				      	end if;
+                    end loop;
                 when others =>
                     etat <= e_00;
             end case;
@@ -108,6 +123,10 @@ begin
 				ouvrir <= '1';
                 alarme <= '0';
                 message <= "ourr";
+			when e_06 =>
+				ouvrir <= '1';
+		   		alarme <= '0';
+		   	  	message <= "cmod";
             when others =>
                 ouvrir <= '0';
                 alarme <= '0';

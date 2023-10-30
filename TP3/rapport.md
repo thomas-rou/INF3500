@@ -22,9 +22,10 @@ Voici un résumé des modifications que nous avons apportées pour la partie 1 :
 Nous avons complété les spécifications de la partie 2.
 
 Voici un résumé des modifications que nous avons apportées pour la partie 2 :
-- item 1
-- item 2
-- item 3
+- ajout d'un 6ième état
+- Utilisation d'une liste de combinaisons plutôt qu'un code unique
+- Ajout d'enregistrement d'un nouveau code
+- Ajout d'une réinitialisation du cadenans sans reset
 
 Voici un lien vers notre code modifié (incluant, le cas échéant, le bonus): [cadenas_labo_3.vhd](sources/cadenas_labo_3.vhd).
 

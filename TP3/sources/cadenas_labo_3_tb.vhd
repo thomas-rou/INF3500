@@ -30,12 +30,15 @@ architecture arch of cadenas_labos_3_tb is
     signal alarme : std_logic;
     signal message : string(1 to 4);
     
-    type combinaison_type is array (0 to 19) of std_logic_vector(N - 1 downto 0);
+    type combinaison_type is array (0 to 34) of std_logic_vector(N - 1 downto 0);
     signal vecteurs : combinaison_type := (
     "0001", "0001", "0001", "0001", "0001", 
     "0000", "0000", "0000", "0000", "0001", 
     "0010", "0100", "1000", "0001", "0010",
-    "0001", "0010", "0100", "0000", "0001"
+    "0101", "0010", "0100", "0000", "0001",
+	"0100", "0101", "0010", "0100", "0000", 
+	"0001", "0100", "0100", "0000", "0001",
+	"0001", "1010", "0001", "0010", "0001"
     );
     
     signal vecteur_tests_un_bouton : std_logic_vector(15 downto 0) := "0011100101110011";
@@ -78,7 +81,7 @@ begin
 				end loop;
 				
 				if ouvrir = '1' then
-					assert(message = "ourr")	report "mauvais message affiché" 		severity note;					
+					assert(message = "ourr" or message = "cmod")	report "mauvais message affiché" 		severity note;					
 					assert(codeValide = true) 	report "code invalide  ouvre la porte" 	severity warning;				
 				end if;
 				
