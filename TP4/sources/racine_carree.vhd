@@ -34,16 +34,70 @@ architecture newton of racine_carree is
     signal etat : etat_type := attente;
     
 --- votre code ici
-
+	component division_par_reciproque
+		generic (W_num, W_denom, W_frac : integer);
+		port (
+		num                 : in  unsigned(W_num - 1 downto 0);             -- numérateur
+        	denom               : in  unsigned(W_denom - 1 downto 0);           -- dénominateur
+        	quotient            : out unsigned(W_num + W_frac - 1 downto 0);    -- approximation du quotient de num / denom
+        	erreur_div_par_0    : out std_logic                                 -- '1' si b = 0
+		);
+	end component division_par_reciproque;
+	
+	signal quotient : unsigned(N + W_frac - 1 downto 0);
+	signal quotient_8bits, xk, div_2_result : unsigned(M - 1 downto 0);
+	signal sum_result : unsigned(M downto 0); 
+	signal A_int : unsigned(N - 1 downto 0);
+	signal erreur_div_0 : std_logic;
+	
 begin
-    
---    diviseur : entity division_par_reciproque(arch)
---        generic map (N, M, W_frac)
---        port map (un-signal-ici, un-signal-ici, un-signal-ici, un-signal-ici);
-
-    X <= to_unsigned(255, X'length); -- code bidon
-    fini <= '1'; -- code bidon
-
-    -- votre code ici
-    
+	diviseur1 : division_par_reciproque
+			generic map (N, M, W_frac)
+			port map (
+			num => A, denom => xk, quotient => quotient, erreur_div_par_0 => erreur_div_0
+			);
+	process(all) is
+		variable k : natural := 0;	
+	begin			
+		if reset = '1' then
+    			etat <= attente;
+		else
+			case etat is
+				when attente =>
+				if go = '1' and rising_edge(clk) then
+					k := 0;
+					A_int <= A;
+					xk <= to_unsigned(255, M);
+					etat <= calculs;
+				end if;
+				when calculs =>
+				-- xk <-- (xk + A / xk)/ 2
+				quotient_8bits <= resize(quotient(23 downto 16), M);
+				sum_result <= ('0' & xk) + ('0' & quotient_8bits);
+				div_2_result <= resize(sum_result srl 1, M);
+				if rising_edge(clk) then
+					xk <= div_2_result;
+					k := k + 1;
+				end if;
+				if k = kmax then
+					etat <= attente;
+				end if;
+				when others =>
+				etat <= attente;
+			end case;
+		end if;
+	end process;
+	
+	process(all)
+	begin
+		X <= xk;		
+		case etat is 
+			when attente =>
+				fini <= '1';
+			when calculs =>
+				fini <= '0';
+			when others =>
+				fini <= '0';
+		end case;
+	end process;    
 end newton;
