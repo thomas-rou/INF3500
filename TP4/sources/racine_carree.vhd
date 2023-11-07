@@ -72,7 +72,7 @@ begin
 				end if;
 				when calculs =>
 				-- xk <-- (xk + A / xk)/ 2
-				quotient_8bits <= resize(quotient(23 downto 16), M);
+				quotient_8bits <= resize(quotient(21 downto 14), M);
 				sum_result <= ('0' & xk) + ('0' & quotient_8bits);
 				div_2_result <= resize(sum_result srl 1, M);
 				if rising_edge(clk) then
