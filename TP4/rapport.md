@@ -2,11 +2,11 @@
 ------------------------------------------------------------------------
 
 # INF3500 - labo 4 - automne 2023
-# Équipe **nom-d-équipe-ici**
+# Équipe
 
-Membre #1 : **nom, prénom, matricule**
+Membre #1 : **Michaud, Maël, 2209239**
 
-Membre #2 : **nom, prénom, matricule**
+Membre #2 : **Rouleau, Thomas, 2221053**
 
 ------------------------------------------------------------------------
 
@@ -14,16 +14,14 @@ Membre #2 : **nom, prénom, matricule**
 
 **Faire un choix et garder seulement une option.**
 Nous utilisons la carte Basys 3.
-Nous utilisons la carte Nexys A7-50T.
-Nous utilisons la carte Nexys A7-100T.
 
 Voici un lien vers notre fichier de configuration final : [top_labo_4.bit](synthese-implementation/top_labo_4.bit)
 
 Voici les ressources utilisées par notre système :
 Quoi | Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
 --- | ---------- | --------------- | -------- | -------- | ------------
-module racine_carre seul | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-tout le système | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
+module racine_carre seul | 220    | 142         | 6  | 0  | 28
+tout le système | 329    | 213         | 8  | 1  | 50
 
 ## Partie 4: Bonus
 
