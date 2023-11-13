@@ -20,8 +20,8 @@ Voici un lien vers notre fichier de configuration final : [top_labo_4.bit](synth
 Voici les ressources utilisées par notre système :
 Quoi | Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
 --- | ---------- | --------------- | -------- | -------- | ------------
-module racine_carre seul | 220    | 142         | 6  | 0  | 28
-tout le système | 329    | 213         | 8  | 1  | 50
+module racine_carre seul | 92    | 72         | 6  | 0  | 28
+tout le système | 190    | 135         | 0  | 0  | 50
 
 ## Partie 4: Bonus
 
