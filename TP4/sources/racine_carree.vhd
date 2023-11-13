@@ -45,7 +45,7 @@ architecture newton of racine_carree is
 	end component division_par_reciproque;
 	
 	signal quotient : unsigned(N + W_frac - 1 downto 0);
-	signal quotient_8bits, xk, div_2_result : unsigned(M - 1 downto 0);
+	signal quotient_8bits, xk, div_2_result, xk_pipeline : unsigned(M - 1 downto 0);
 	signal sum_result : unsigned(M downto 0); 
 	signal A_int : unsigned(N - 1 downto 0);
 	signal erreur_div_0 : std_logic;
@@ -57,29 +57,48 @@ begin
 			num => A, denom => xk, quotient => quotient, erreur_div_par_0 => erreur_div_0
 			);
 	process(all) is
-		variable k : natural := 0;	
-	begin			
+	variable k : natural := 0;
+	variable initial_xk : natural := 255;	   
+	begin
+		quotient_8bits <= resize(quotient(21 downto 14), M);
 		if reset = '1' then
     			etat <= attente;
-		else
+		elsif rising_edge(clk) then
 			case etat is
 				when attente =>
-				if go = '1' and rising_edge(clk) then
+				if go = '1' then
 					k := 0;
 					A_int <= A;
-					xk <= to_unsigned(255, M);
+					
+					-- Choix de X0 en fonction de la magnitude de A
+                    if A > 16384 then
+                        initial_xk := 255;
+                    elsif A > 4096 then
+                        initial_xk := 128;
+                    elsif A > 1024 then
+                        initial_xk := 64;
+                    elsif A > 256 then
+                        initial_xk := 32;
+                    elsif A > 64 then
+                        initial_xk := 16;
+                    else
+                        initial_xk := 8;
+                    end if;
+					
+					xk <= to_unsigned(initial_xk, M);
 					etat <= calculs;
 				end if;
 				when calculs =>
 				-- xk <-- (xk + A / xk)/ 2
-				quotient_8bits <= resize(quotient(21 downto 14), M);
+				--quotient_8bits <= resize(quotient(21 downto 14), M);
 				sum_result <= ('0' & xk) + ('0' & quotient_8bits);
 				div_2_result <= resize(sum_result srl 1, M);
-				if rising_edge(clk) then
+
 					xk <= div_2_result;
 					k := k + 1;
-				end if;
+
 				if k = kmax then
+					xk_pipeline <= xk;
 					etat <= attente;
 				end if;
 				when others =>
@@ -90,7 +109,7 @@ begin
 	
 	process(all)
 	begin
-		X <= xk;		
+		X <= xk_pipeline;		
 		case etat is 
 			when attente =>
 				fini <= '1';

@@ -26,15 +26,14 @@ tout le système | 329    | 213         | 8  | 1  | 50
 ## Partie 4: Bonus
 
 *Faire un choix et garder seulement une option.*
-- Nous n'avons pas complété le bonus. Nous nous concentrons sur notre réussite dans ce cours et dans d'autres.
 - Nous sommes vraiment en avance dans nos études, dans ce cours et tous les autres, et nous adorons les défis dans ce cours, donc nous avons complété une ou plusieurs parties du bonus.
 
 ### Partie 4a :
 
-Notre fichier [racine_carree.vhd](sources/racine_carree.vhd). contient des changements pour le calcul de la valeur initiale X<sub>0</sub>, aux lignes ... Nous avons choisi une approche basée sur ...
+Notre fichier [racine_carree.vhd](sources/racine_carree.vhd). contient des changements pour le calcul de la valeur initiale X<sub>0</sub>, aux lignes 61 et aux lignes 73 à 87.
 
 ### Partie 4b :
 
-Notre fichier [racine_carree.vhd](sources/racine_carree.vhd) contient des changements pour de la division.
+Notre fichier [racine_carree.vhd](sources/racine_carree.vhd) ne contiennent pas de changements pour de la division.
 
 Nous avons utiliser un module différent décrit dans le fichier [votre-nom-de-fichier.vhd](sources/votre-nom-de-fichier.vhd). Notre approche consiste à ...
