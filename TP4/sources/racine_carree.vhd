@@ -89,13 +89,11 @@ begin
 					etat <= calculs;
 				end if;
 				when calculs =>
-				-- xk <-- (xk + A / xk)/ 2
-				--quotient_8bits <= resize(quotient(21 downto 14), M);
 				sum_result <= ('0' & xk) + ('0' & quotient_8bits);
 				div_2_result <= resize(sum_result srl 1, M);
 
-					xk <= div_2_result;
-					k := k + 1;
+				xk <= div_2_result;
+				k := k + 1;
 
 				if k = kmax then
 					xk_pipeline <= xk;
