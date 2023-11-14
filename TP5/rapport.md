@@ -71,12 +71,11 @@ Voici les modifications que nous avons apportées aux fichiers.
 ## Partie 3 : Bonus
 
 *Faire un choix et garder seulement une option.*
-- Nous n'avons pas complété le bonus. Nous nous concentrons sur notre réussite dans ce cours et dans d'autres.
 - Nous sommes vraiment en avance dans nos études, dans ce cours et tous les autres, et nous adorons les défis dans ce cours, donc nous avons complété une ou plusieurs parties du bonus.
 
 ### Partie 3a
 
-Notre approche consiste à ...
+Notre approche consiste à placer l'assignation des caractères d'entrées de chaque état dans une condition ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')). l'assignation de la sortie au caractère peut donc seulement se faire si la condition est rempli. Si un caractère reçu ne rempli pas la condition, alors l'état change pour l'état s_erreur qui a été ajouté. Celui-ci affiche le message d'erreur et retrourne à l'état s_bienvenue pour attendre une nouvelle entrée.
 
 ### Partie 3b
 

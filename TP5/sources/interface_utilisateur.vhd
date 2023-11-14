@@ -112,29 +112,45 @@ begin
                 -- recevoir le chiffre le plus significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
-                    A(7 downto 4) <= character_to_hex(caractere);
-                    etat <= s_n1_L;
+					if ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')) then
+                    	A(7 downto 4) <= character_to_hex(caractere);
+                    	etat <= s_n1_L;
+					else
+						etat <= s_erreur;
+					end if;
                 end if;
             when s_n1_L =>
                 -- recevoir le deuxième chiffre le plus significatif du premier nombre
                 go_tx <= '0';
                 if car_recu = '1' then
-                    A(3 downto 0) <= character_to_hex(caractere);
-                    etat <= s_n2_H;
+					if ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')) then
+                    	A(3 downto 0) <= character_to_hex(caractere);
+                    	etat <= s_n2_H;
+					else
+						etat <= s_erreur;
+					end if;
                 end if;
             when s_n2_H =>
                 -- recevoir le troisième chiffre le plus significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
-                    B(7 downto 4) <= character_to_hex(caractere);
-                    etat <= s_n2_L;
+					if ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')) then
+                    	B(7 downto 4) <= character_to_hex(caractere);
+                    	etat <= s_n2_L;
+					else
+						etat <= s_erreur;
+					end if;
                 end if;
             when s_n2_L =>
                 -- recevoir le chiffre moins significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
-                    B(3 downto 0) <= character_to_hex(caractere);
-                    etat <= s_resultat;
+					if ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')) then
+                    	B(3 downto 0) <= character_to_hex(caractere);
+                    	etat <= s_resultat;
+					else
+						etat <= s_erreur;
+					end if;
                 end if;
             when s_resultat =>
                 -- message pour les résultats
@@ -145,6 +161,15 @@ begin
                     etat <= s_bienvenue;
                     compteur_delai := f_clk / delai - 1;
                 end if;
+			when s_erreur =>
+				-- message d'erreur
+				go_tx <= '0';
+				if tx_pret = '1' then
+					message <= m9;
+					go_tx <= '1';
+					etat <= s_bienvenue;
+					compteur_delai := f_clk / delai - 1;
+				end if;
             when others =>
                 go_tx <= '0';
                 etat <= s_bienvenue;
