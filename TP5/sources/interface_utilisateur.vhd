@@ -40,8 +40,7 @@ architecture arch of interface_utilisateur is
     -- CR, "carriage return," est un retour de charriot au début de la ligne
     -- LF, "line feed,"       est un changement de ligne
     constant m0 : string := CR & LF & "Bonjour, bienvenue au programme du calcul du PGFC entre deux nombres.v1751" & CR & LF;
-    constant m1 : string := CR & LF & "Entrez le premier nombre à deux chiffres hexadécimaux {0 - 9, A - F}.     " & CR & LF;
-    constant m2 : string := CR & LF & "Entrez le deuxième nombre à deux chiffres hexadécimaux {0 - 9, A - F}.    " & CR & LF;
+    constant m1 : string := CR & LF & "Entrez le nombre à quatres chiffres hexadécimaux {0 - 9, A - F}.          " & CR & LF;	-- changement du message pour un seul input au lieu de deux
     constant m3 : string := CR & LF & "Calculs en cours. Résultats sur la carte.                                 " & CR & LF;
     constant m4 : string := CR & LF & "--------------------------------------------------------------------------" & CR & LF;
     constant m9 : string := CR & LF & "Erreur, nombre invalide, chiffres hexadécimaux seulement {0 - 9, A - F}.  " & CR & LF;
@@ -49,7 +48,7 @@ architecture arch of interface_utilisateur is
     signal message : string(1 to m0'length);
     signal caractere : character;
 
-    type etat_type is (s_bienvenue, s_n1_m, s_n1_H, s_n1_L, s_n2_m, s_n2_H, s_n2_L, s_calcul, s_resultat, s_erreur);
+    type etat_type is (s_bienvenue, s_n1_m, s_n1_H, s_n1_L, s_n2_H, s_n2_L, s_calcul, s_resultat, s_erreur);
     signal etat : etat_type := s_bienvenue;
 
     signal go_tx   : std_logic;
@@ -97,7 +96,7 @@ begin
                     compteur_delai := compteur_delai - 1;
                 end if;
             when s_n1_m =>
-                -- message pour le premier nombre
+                -- message pour nombre
                 go_tx <= '0';
                 -- prendre une pause entre deux messages, pour laisser au transmetteur le temps de faire son travail
                 if compteur_delai = 0 then
@@ -110,36 +109,28 @@ begin
                     compteur_delai := compteur_delai - 1;
                 end if;
             when s_n1_H =>
-                -- recevoir le chiffre le plus significatif du premier nombre
+                -- recevoir le chiffre le plus significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
                     A(7 downto 4) <= character_to_hex(caractere);
                     etat <= s_n1_L;
                 end if;
             when s_n1_L =>
-                -- recevoir le chiffre le moins significatif du premier nombre
+                -- recevoir le deuxième chiffre le plus significatif du premier nombre
                 go_tx <= '0';
                 if car_recu = '1' then
                     A(3 downto 0) <= character_to_hex(caractere);
-                    etat <= s_n2_m;
-                end if;
-            when s_n2_m =>
-                -- message pour le 2e nombre
-                go_tx <= '0';
-                if tx_pret = '1' then
-                    message <= m2;
-                    go_tx <= '1';
                     etat <= s_n2_H;
                 end if;
             when s_n2_H =>
-                -- recevoir le chiffre le plus significatif du 2e nombre
+                -- recevoir le troisième chiffre le plus significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
                     B(7 downto 4) <= character_to_hex(caractere);
                     etat <= s_n2_L;
                 end if;
             when s_n2_L =>
-                -- recevoir le chiffre moins significatif du 2e nombre
+                -- recevoir le chiffre moins significatif du nombre
                 go_tx <= '0';
                 if car_recu = '1' then
                     B(3 downto 0) <= character_to_hex(caractere);

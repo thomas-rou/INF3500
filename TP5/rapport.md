@@ -4,9 +4,9 @@
 # INF3500 - labo 5 - automne 2023
 # Équipe **nom-d-équipe-ici**
 
-Membre #1 : **nom, prénom, matricule**
+Membre #1 : **Michaud, Maël, 2209239**
 
-Membre #2 : **nom, prénom, matricule**
+Membre #2 : **Rouleau, Thomas, 2221053**
 
 ------------------------------------------------------------------------
 
@@ -53,17 +53,19 @@ La définition de la fonction `character_to_hex()` se trouve  ....
 
 Voici les modifications que nous avons apportées aux fichiers.
 
-- fichier1.vhd
-    - ceci
-    - cela
+- top_labo_5.vhd
+    - Retrait des signaux B, B0 et B_affichage. La raison étant que l'entité racine_carree ne prend qu'un seul input de 16 bits et non 2 inputs de 8 bits comme l'entité pgcf3.
+    - Changement de la taille des signaux A, A0 et A_affichage de 8 bits à 16 bits. La raison étant que l'entité racine_carree prend un input de 16 bits et que l'on peut placer les 2 sorties de l'entité interface_utilisateur sur le même signal A0 de 16 bits poyr l'entité racine_carree.
+    - Les 2 sorties A0 et B0 ont été remplacées par A0(15 downto 8) et A0(7 downto 0) afin de pouvoir les placer sur les 2 ouputs sur le même signal de 16 bits de l'entité racine_carree.
+    - L'utilisation de l'entité racine_carree a été ajoutée avec son assignations de signaux.
+    - L'utilisation de B_afichage a été retirée et remplacée par l'utilisation du signal de 16 bits A_affichage.
 
-- fichier2.vhd
-    - ceci
-    - cela
+- interface_utilisateur.vhd
+    - Modification du message de la constante m1 et retrait de la constante m2. La raison étant que l'entité racine_carree ne prend qu'un seul input de 16 bits et non 2 inputs de 8 bits comme l'entité pgcf3.
+    - Retrait de l'état s_n2_m associé à l'affichage de l'attente du deuxième input comme un seul input de 16 bits est désiré par l'entité racine_carree.
+    - Liaison de l'état s_n1_L à l'état s_n2_H
 
-- fichier3.vhd
-    - ceci
-    - cela
+- racine_carree.vhd et division_par_reciproque.vhd on été ajoutés afin de pouvoir utiliser l'entité racine_carree dans le fichier top_labo_5.vhd. Ceux-ci ont également été ajoutés dans la liste des fichiers sources VHDL. pgfc3.vhd a été commenté dans la liste des fichiers sources VHDL car il n'est plus utilisé.
 
 
 ## Partie 3 : Bonus

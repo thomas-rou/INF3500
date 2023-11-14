@@ -49,7 +49,7 @@ architecture arch of top_labo_5 is
 
     signal le_caractere : character;
     signal valide : std_logic;
-    signal A0, B0, A, B, A_affichage, B_affichage : unsigned(7 downto 0);
+    signal A0, A, A_affichage : unsigned(15 downto 0);	-- Module racine_carree utilise un seul input de 16 bits
 
     signal go_processeur, processeur_fini : std_logic;
 
@@ -71,20 +71,21 @@ begin
 
     interface : entity interface_utilisateur(arch)
 		generic map (100e6, 9600)
-		port map (reset, clk, RsRx, RsTx, A0, B0, go_processeur);
-
-    processeur : entity pgfc3(arch)
-        generic map (8)
-        port map (reset, clk, A0, B0, go_processeur, A, B, processeur_fini);
+		port map (reset, clk, RsRx, RsTx, A0(15 downto 8),A0(7 downto 0), go_processeur);	-- 2 outputs de 8 bits placées en ordre sur le signal A0 de 16 bits
+	
+	-- définition des liens avec l'architecture newton de l'entité racine_carree
+	processeur : entity racine_carree(newton) 
+		generic map (16, 8, 10)
+		port map (reset, clk, A0, go_processeur, A(7 downto 0), processeur_fini);	-- Module racine_carree a un output de 8 bits
 
     led(0) <= processeur_fini;
     led(1) <= go_processeur;
     A_affichage <= A0 when sw(0) = '1' else A;
-    B_affichage <= B0 when sw(0) = '1' else B;
-    symboles(3) <= hex_to_7seg(unsigned(A_affichage(7 downto 4)));
-    symboles(2) <= hex_to_7seg(unsigned(A_affichage(3 downto 0)));
-    symboles(1) <= hex_to_7seg(unsigned(B_affichage(7 downto 4)));
-    symboles(0) <= hex_to_7seg(unsigned(B_affichage(3 downto 0)));
+	-- assignation de la valeur de sortie de racine_carree à l'affichage
+	symboles(3) <= hex_to_7seg(unsigned(A_affichage(15 downto 12)));
+    symboles(2) <= hex_to_7seg(unsigned(A_affichage(11 downto 8)));
+    symboles(1) <= hex_to_7seg(unsigned(A_affichage(7 downto 4)));	-- seulement 2 derniers symboles hex contiennent la sortie de racine_carree sur 8 bits
+    symboles(0) <= hex_to_7seg(unsigned(A_affichage(3 downto 0)));
 
     -- circuit pour sérialiser l'accès à l'affichage
     -- l'affichage contient quatre symboles chacun composé de sept segments et d'un point
