@@ -16,7 +16,7 @@ Membre #2 : **Rouleau, Thomas, 2221053**
 
 Voici notre diagramme :
 
-<img src="figures/diagramme.png" alt="notre diagramme" width="600">
+<img src="figures/Diagramme.jpg" alt="notre diagramme" width="600">
 
 ### Description des modules
 
@@ -36,7 +36,9 @@ Ce module implémente le module uart_tx_message et le module uart_rx_char. Il ut
 
 ### Analyse de quelques lignes de code
 
-Voici notre analyse des lignes de code VHDL suivantes.
+VVoici notre analyse des lignes de code VHDL suivantes:
+- On définit d'abord 4 signaux, deux caractère (c1, c2)et deux std_logic_vector de 8 bits (r1, r2). Ensuite, on assigne a r1 la valeur en bit du code ASCII du caractère c1. On assigne à c2 le caractère qui, dans la table ASCII, à la valeur de l'integer donné par r2.
+
 
 ```
 signal c1, c2 : character;
@@ -46,7 +48,7 @@ r1 <= std_logic_vector(to_unsigned(character'pos(c1), 8));
 c2 <= character'val(to_integer(unsigned(r2)));
 ```
 
-La définition de la fonction `character_to_hex()` se trouve  ....
+La définition de la fonction `character_to_hex()` se trouve  dans le fichier utilitaires_inf3500_pkg.vhd.
 
 
 ## Partie 2
