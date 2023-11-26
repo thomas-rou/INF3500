@@ -71,12 +71,13 @@ begin
 
     interface : entity interface_utilisateur(arch)
 		generic map (100e6, 9600)
-		port map (reset, clk, RsRx, RsTx, A0(15 downto 8),A0(7 downto 0), go_processeur);	-- 2 outputs de 8 bits placées en ordre sur le signal A0 de 16 bits
+		port map (reset, clk, RsRx, A, processeur_fini, RsTx, A0(15 downto 8), A0(7 downto 0), go_processeur);	-- 2 outputs de 8 bits placées en ordre sur le signal A0 de 16 bits
 	
 	-- définition des liens avec l'architecture newton de l'entité racine_carree
 	processeur : entity racine_carree(newton) 
 		generic map (16, 8, 10)
 		port map (reset, clk, A0, go_processeur, A(7 downto 0), processeur_fini);	-- Module racine_carree a un output de 8 bits
+		
 
     led(0) <= processeur_fini;
     led(1) <= go_processeur;

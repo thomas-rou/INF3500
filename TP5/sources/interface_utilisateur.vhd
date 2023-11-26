@@ -27,10 +27,12 @@ entity interface_utilisateur is
     );
     port (
         reset, clk : in  std_logic;
-        RsRx       : in  std_logic;         -- interface USB-RS-232 réception
-        RsTx       : out std_logic;         -- interface USB-RS-232 transmission
+        RsRx       : in  std_logic;         	-- interface USB-RS-232 réception 
+		res		   : in unsigned(15 downto 0);	-- input d'un résultat extérieur
+		res_pret   : in std_logic;				-- input indiquant si le résultat est prêt à être lus
+        RsTx       : out std_logic;         	-- interface USB-RS-232 transmission
         A, B       : out unsigned(7 downto 0);
-        input_ok   : out std_logic          -- on a reçu toutes les entrées des utilisateurs
+        input_ok   : out std_logic          	-- on a reçu toutes les entrées des utilisateurs
     );
 end;
 
@@ -39,11 +41,11 @@ architecture arch of interface_utilisateur is
     -- ** Tous les messages doivent avoir la même taille **
     -- CR, "carriage return," est un retour de charriot au début de la ligne
     -- LF, "line feed,"       est un changement de ligne
-    constant m0 : string := CR & LF & "Bonjour, bienvenue au programme du calcul du PGFC entre deux nombres.v1751" & CR & LF;
-    constant m1 : string := CR & LF & "Entrez le nombre à quatres chiffres hexadécimaux {0 - 9, A - F}.          " & CR & LF;	-- changement du message pour un seul input au lieu de deux
-    constant m3 : string := CR & LF & "Calculs en cours. Résultats sur la carte.                                 " & CR & LF;
-    constant m4 : string := CR & LF & "--------------------------------------------------------------------------" & CR & LF;
-    constant m9 : string := CR & LF & "Erreur, nombre invalide, chiffres hexadécimaux seulement {0 - 9, A - F}.  " & CR & LF;
+    constant m0 : string := CR & LF & "Bonjour, bienvenue au programme du calcul du PGFC entre deux nombres.v1751" 						& CR & LF;
+    constant m1 : string := CR & LF & "Entrez le nombre à quatres chiffres hexadécimaux {0 - 9, A - F}.          " 						& CR & LF;	-- changement du message pour un seul input au lieu de deux
+    constant m3 : string := CR & LF & "Calculs en cours.                                                         " 						& CR & LF;  
+    constant m4 : string := CR & LF & "Résultat : " & to_hstring(res) &  "                                                           " 	& CR & LF;	-- message incluant l'entrée des résultats
+    constant m9 : string := CR & LF & "Erreur, nombre invalide, chiffres hexadécimaux seulement {0 - 9, A - F}.  " 						& CR & LF;	-- message d'erreur de mauvaise entrée
 
     signal message : string(1 to m0'length);
     signal caractere : character;
@@ -147,19 +149,31 @@ begin
                 if car_recu = '1' then
 					if ((caractere >= '0' and caractere <= '9') or (caractere >= 'A' and caractere <= 'F')) then
                     	B(3 downto 0) <= character_to_hex(caractere);
-                    	etat <= s_resultat;
+                    	etat <= s_calcul;
 					else
 						etat <= s_erreur;
 					end if;
                 end if;
-            when s_resultat =>
-                -- message pour les résultats
-                go_tx <= '0';
+			when s_calcul =>
                 if tx_pret = '1' then
-                    message <= m3;
-                    go_tx <= '1';
-                    etat <= s_bienvenue;
-                    compteur_delai := f_clk / delai - 1;
+					message <= m3; -- passe le message m3 comme message
+                 	go_tx <= '1';
+                   	etat <= s_resultat;
+                   	compteur_delai := f_clk / delai - 1;
+                end if;
+            when s_resultat =>
+				go_tx <= '0';
+				-- prendre une pause entre deux messages, pour laisser au transmetteur le temps de faire son travail
+				if compteur_delai = 0 then
+                -- message pour les résultats
+                	if tx_pret = '1' and res_pret = '1' then
+						message <= m4; -- passe le message m4 contenant le résultat comme message
+                 		go_tx <= '1';
+                   		etat <= s_bienvenue;
+                   		compteur_delai := f_clk / delai - 1;
+                	end if;
+				else
+                    compteur_delai := compteur_delai - 1;
                 end if;
 			when s_erreur =>
 				-- message d'erreur

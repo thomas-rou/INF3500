@@ -79,4 +79,4 @@ Notre approche consiste à placer l'assignation des caractères d'entrées de ch
 
 ### Partie 3b
 
-Notre approche consiste à ...
+Notre approche consiste à ajoute 2 entrées au module d'interface afin de lui transmettre le résultats de l'opération ainsi que l'indication que l'opération est terminée. Lorsque l'opération est terminée, l'interface affiche le résultat. Le message est passé comme string et sous forme hexadecimal à l'aide de to_hstring(). Nous avons également séparé le message de calcul du message d'affichage des résultats dans 2 états différents afin d'améliorer l'affichage.
