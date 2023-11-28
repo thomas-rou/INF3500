@@ -44,7 +44,7 @@ signal choixDonnee_BR : natural range 0 to 2;
 -------------------------------------------------------------------------------
 -- signaux de l'UAL
 --
-signal op_UAL : natural range 0 to 10;
+signal op_UAL : natural range 0 to 12;
 signal valeur : signed(Wd - 1 downto 0);
 signal choixB_UAL : natural range 0 to 1;
 signal F : signed(Wd - 1 downto 0);
@@ -115,6 +115,8 @@ begin
             when absA => F_UAL := abs(A);
             when minAB => F_UAL := minimum(A, B_UAL);
             when maxAB => F_UAL := maximum(A, B_UAL);
+			when AmulB => F_UAL := A(Wd / 2 - 1 downto 0) * B(Wd / 2 - 1 downto 0);
+			when Adiv2 => F_UAL := A / 2;
             when others => F_UAL := (others => '0');
         end case;
 

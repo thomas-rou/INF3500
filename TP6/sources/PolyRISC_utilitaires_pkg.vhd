@@ -47,6 +47,8 @@ package PolyRISC_utilitaires_pkg is
     constant absA    : natural := 8;
     constant minAB   : natural := 9;
     constant maxAB   : natural := 10;
+	constant AmulB   : natural := 11;
+	constant Adiv2	 : natural := 12;
 
     -- encodage des conditions de branchement
     constant egal : natural := 0;
