@@ -64,12 +64,17 @@ begin
             GPIO_out        => GPIO_out,
             GPIO_out_valide => GPIO_out_valide
         );
+	
+	-- instantiation de l'interface	PuTTY
+	interface : entity interface_utilisateur(arch)
+		generic map (100e6, 9600)
+		port map (btnC, clk, RsRx, GPIO_out(15 downto 0), GPIO_out_valide, RsTx, GPIO_in(15 downto 8), GPIO_in(7 downto 0), GPIO_in_valide);
 
     -- on relie les 16 commutateurs à GPIO_in
     -- et un bouton à GPIO_in_valide
-    GPIO_in(15 downto 0) <= signed(sw);
-    GPIO_in(31 downto 16) <= (others => '0');
-    GPIO_in_valide <= btnU;
+    --GPIO_in(15 downto 0) <= signed(sw);
+    --GPIO_in(31 downto 16) <= (others => '0');
+    --GPIO_in_valide <= btnU;
 
     -- Pour la carte Basys 3 :
     --   Connexion de la sortie GPIO_out aux affichages à 7 segments.

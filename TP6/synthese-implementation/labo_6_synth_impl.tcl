@@ -1,16 +1,16 @@
 # -------------------------------------------------------------------------------
 # labo_6_synth_impl.tcl
 #
-# Il faut d'abord ouvrir une fenêtre d'invite de commande (dans Windows : cmd).
-# Ensuite naviguer dans le bon répertoire, par exemple user\docs\poly\inf3500\labo6\synthese-implementation
+# Il faut d'abord ouvrir une fenï¿½tre d'invite de commande (dans Windows : cmd).
+# Ensuite naviguer dans le bon rï¿½pertoire, par exemple user\docs\poly\inf3500\labo6\synthese-implementation
 #
 # On peut lancer Vivado avec la commande "C:\Xilinx\Vivado\2021.1\bin\vivado -mode tcl"
-# (** doit correspondre à la version de Vivado que vous avez installée **)
+# (** doit correspondre ï¿½ la version de Vivado que vous avez installï¿½e **)
 #
-# Ensuite, on peut copier-coller les commandes du présent fichier une à une ou en groupe,
+# Ensuite, on peut copier-coller les commandes du prï¿½sent fichier une ï¿½ une ou en groupe,
 # selon les besoins afin d'avancer dans le flot selon son rythme et les erreurs qui peuvent survenir.
 #
-# Il faut commenter et dé-commenter les lignes qui correspondent à votre carte.
+# Il faut commenter et dï¿½-commenter les lignes qui correspondent ï¿½ votre carte.
 #
 # -------------------------------------------------------------------------------
 #
@@ -22,25 +22,29 @@ read_vhdl -vhdl2008 ../sources/PolyRISC_v10c.vhd
 read_vhdl -vhdl2008 ../sources/PolyRISC_utilitaires_pkg.vhd
 read_vhdl -vhdl2008 ../sources/PolyRISC_le_programme_pkg.vhd
 read_vhdl -vhdl2008 ../sources/top_labo_6.vhd
+read_vhdl -vhdl2008 ../sources/interface_utilisateur.vhd
+read_vhdl -vhdl2008 ../sources/uart_rx_char.vhd
+read_vhdl -vhdl2008 ../sources/uart_tx_char.vhd
+read_vhdl -vhdl2008 ../sources/uart_tx_message.vhd
 
-# lecture du fichier de contraintes xdc; choisir la ligne qui correspond à votre carte
+# lecture du fichier de contraintes xdc; choisir la ligne qui correspond ï¿½ votre carte
 read_xdc ../xdc/basys_3_top.xdc
 #read_xdc ../xdc/nexys_a7_50t_top.xdc
 #read_xdc ../xdc/nexys_a7_100t_top.xdc
 
-# synthèse - choisir la ligne qui correspond à votre carte
+# synthï¿½se - choisir la ligne qui correspond ï¿½ votre carte
 synth_design -top top_labo_6 -part xc7a35tcpg236-1 -assert
 #synth_design -top top_labo_6 -part xC7a50TCSG324 -assert
 #synth_design -top top_labo_6 -part xC7a100TCSG324 -assert
 
-# ressources utilisées
+# ressources utilisï¿½es
 #report_utilization -file monrapport.txt -hierarchical -append
 
-#implémentation (placement et routage)
+#implï¿½mentation (placement et routage)
 place_design
 route_design
 
-#génération du fichier de configuration
+#gï¿½nï¿½ration du fichier de configuration
 write_bitstream -force top_labo_6.bit
 
 # programmation du FPGA
@@ -49,7 +53,7 @@ connect_hw_server
 get_hw_targets
 open_hw_target
 
-# choisir les trois lignes qui correspondent à votre carte
+# choisir les trois lignes qui correspondent ï¿½ votre carte
 current_hw_device [get_hw_devices xc7a35t_0]
 set_property PROGRAM.FILE {top_labo_6.bit} [get_hw_devices xc7a35t_0]
 program_hw_devices [get_hw_devices xc7a35t_0]
