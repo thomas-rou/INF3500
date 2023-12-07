@@ -43,16 +43,25 @@ Voici le nombre de ressources utilisées par le PolyRISC selon les valeurs deman
 
 Nreg | Wd | Mi | Md | version du processeur | Slice LUTs | Slice Registers | F7 Muxes | F8 Muxes | Bonded IOB
 ---- | -- | -- | -- | --------------------- | ---------- | --------------- | -------- | -------- | ------------
-16   | 32 | 8  | 8  | version de base       | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-16   | 64 | 8  | 8  | version de base       | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-32   | 32 | 8  | 8  | version de base       | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-32   | 64 | 8  | 8  | version de base       | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-16   | 32 | 8  | 8  | version partie 1      | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-16   | 64 | 8  | 8  | version partie 1      | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-32   | 32 | 8  | 8  | version partie 1      | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
-32   | 64 | 8  | 8  | version partie 1      | nombre?    | nombre?         | nombre?  | nombre?  | nombre?
+16   | 32 | 8  | 8  | version de base       | 292    | 197        | 0  | 0  | 68
+16   | 64 | 8  | 8  | version de base       | 555    | 389         | 0  | 0  | 132
+32   | 32 | 8  | 8  | version de base       | 290    | 197         | 0  | 0  | 68
+32   | 64 | 8  | 8  | version de base       | 555    | 389         | 0  | 0  | 132
+16   | 32 | 8  | 8  | version partie 1      | 606    | 294         | 96  | 32  | 68
+16   | 64 | 8  | 8  | version partie 1      | 1179    | 582         | 192  | 64  | 132
+32   | 32 | 8  | 8  | version partie 1      | 606    | 294         | 96  | 32  | 68
+32   | 64 | 8  | 8  | version partie 1      | 1213   | 582         | 192 | 64  | 132
 
 Commentez complètement vos résultats ici.
+
+- Si on s'intéresse aux f7 muxes, f8 muxes et aux Bonded IOB des deux versions, on peut voir avec le tableau que seulement
+le Wd influence la différence dans ces valeurs selon la version du processeur. Cela s'explique par le fait que le Wd est la constante
+qui influence la largeur du chemin des données en bit. De ce fait, comme l'information est plus large lorsque Wd =64 que lorsque Wd =32 
+il est normal que ces 3 sections soient plus grandes lorsque Wd = 64.
+- Pour ce qui est des Slice LUTs et des Slice Registers, ils sont influencés autant par le Nreg que le Wd bien que l'influence du Wd est
+plus importante. C'est expliqué par le fait qu'un chemin des données plus grand implique des opérations logiques plus complexes et donc un nombre de Slice LUTs 
+nécessaire plus élevé, mais également un nombre de Slice Registers plus grand pour stocker ces données plus complexes.
+
 
 
 ## Partie 4 : Bonus
