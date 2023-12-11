@@ -3,7 +3,11 @@
 
 # INF3500 - labo 6
 # Équipe *nom-d-equipe-ici*
-# Noms et prénoms des coéquipiers: *vos-noms-et-prenoms-ici*
+# Noms et prénoms des coéquipiers:
+
+Membre #1 : **Michaud, Maël, 2209239**
+
+Membre #2 : **Rouleau, Thomas, 2221053**
 
 ------------------------------------------------------------------------
 
@@ -23,11 +27,7 @@ Le cas échéant, votre banc d'essai modifié [PolyRISC_v10_tb.vhd](sources/Poly
 
 **Faire un choix et garder seulement une option.**
 
-Nous utilisons la carte Basys 3.
-
-Nous utilisons la carte Nexys A7-50T.
-
-Nous utilisons la carte Nexys A7-100T.
+Nous utilisons la carte Basys 3. La partie 4 a été complétée, alors les entrées et sorties se font sur la console avec PuTTY.
 
 Voici un lien vers notre fichier de configuration final : [top_labo_6.bit](synthese-implementation/top_labo_6.bit)
 
@@ -58,5 +58,6 @@ Commentez complètement vos résultats ici.
 ## Partie 4 : Bonus
 
 *Faire un choix et garder seulement une option.*
-- Nous n'avons pas complété le bonus. Nous nous concentrons sur notre réussite dans ce cours et dans d'autres.
 - Nous sommes vraiment en avance dans nos études, dans ce cours et tous les autres, et nous adorons les défis dans ce cours, donc nous avons complété une ou plusieurs parties du bonus.
+
+Utiliser PuTTY pour les entrées et sorties du processeur PolyRISC.
